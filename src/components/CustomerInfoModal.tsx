@@ -1,4 +1,4 @@
-import { Customer } from '@/model/Booking'
+
 import useCustomerStore from '@/stores/customerStore'
 import { PhoneIcon } from '@chakra-ui/icons'
 import { ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, InputGroup, InputLeftElement } from '@chakra-ui/react'
@@ -14,6 +14,13 @@ type FormDataFields = {
     lastName: string,
     phoneNumber: string,
     date: Date,
+}
+
+type Customer = {
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
+
 }
 
 const CustomerInfoModal = (props: Props) => {
