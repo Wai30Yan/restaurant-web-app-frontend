@@ -6,7 +6,7 @@ const url = process.env.NEXT_PUBLIC_URL
 
 export const getAllMenuItems = async (): Promise<MenuItem[]> => {
     try {
-        const response: AxiosResponse<MenuItem[]> = await axios.get(`${url}guest/menu-items`);
+        const response: AxiosResponse<MenuItem[]> = await axios.get(`${url}/guest/menu-items`);
         return response.data;
     } catch (error) {
         throw new Error("Error fetching menu items.")
@@ -15,7 +15,7 @@ export const getAllMenuItems = async (): Promise<MenuItem[]> => {
 
 export const getMenuItemPhoto = async (photoId: string): Promise<string> => {
     try {
-        const response = await axios.get(`${url}guest/get-image/${photoId}`, {
+        const response = await axios.get(`${url}/guest/get-image/${photoId}`, {
             responseType: 'arraybuffer'
         });
 
