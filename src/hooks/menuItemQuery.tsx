@@ -1,5 +1,5 @@
-import { adminGetAllMenuItems, adminGetMenuItemPhoto } from "@/controller/admin_api";
-import { getAllMenuItems, getMenuItemPhoto } from "@/controller/menuItemController";
+import { adminGetAllMenuItems, adminGetMenuItemPhoto, getBookingMenuController } from "@/controller/admin_api";
+import { getAllMenuItems, getMenuItemPhoto } from "@/controller/guest_api";
 import { MenuItem } from "@/model/MenuItem";
 import { useQueries, useQuery } from "react-query"
 
@@ -26,6 +26,7 @@ export const useMenuItemWithPhoto = (): MenuItem[] => {
   return menuItemsWithPhotos;
 }
 
+
 export const useAdminMenuItemWithPhoto = (): MenuItem[] => {
   const { data: menuItems = [] } = useQuery('menu-items', adminGetAllMenuItems);
 
@@ -46,4 +47,10 @@ export const useAdminMenuItemWithPhoto = (): MenuItem[] => {
   }));
 
   return menuItemsWithPhotos;
+}
+
+
+export function useBookingMenuQuery() {
+  const { data: bookingMenus } = useQuery('booking-menus', getBookingMenuController)
+  return bookingMenus
 }

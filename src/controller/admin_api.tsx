@@ -6,7 +6,12 @@ import axios, { AxiosResponse } from "axios"
 const url = process.env.NEXT_PUBLIC_URL
 
 const API = axios.create({
-    baseURL: url
+    baseURL: url,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    }
 })
 
 API.interceptors.request.use((req) => {
@@ -22,9 +27,18 @@ export async function adminLogout(): Promise<AxiosResponse> {
 }
 
 
-export async function getBookingController(): Promise<BookingMenu[]> {
-
+export async function getBookingMenuController(): Promise<BookingMenu[]> {
     const res = await API.get(`${process.env.NEXT_PUBLIC_URL}/admin/bookings`)
+    return res.data
+}
+
+export async function updateBookingController(): Promise<string> {
+    const res = await API.put(`${process.env.NEXT_PUBLIC_URL}/admin/bookings`)
+    return res.data
+}
+
+export async function deleteBookingController(): Promise<string> {
+    const res = await API.delete(`${process.env.NEXT_PUBLIC_URL}/admin/bookings`)
     return res.data
 }
 

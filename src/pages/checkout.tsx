@@ -1,4 +1,4 @@
-import { createBooking } from '@/controller/bookingController';
+
 import { Order } from '@/model/Booking';
 import useCustomerStore from '@/stores/customerStore';
 import useOrderStore from '@/stores/orderStore';
@@ -9,6 +9,7 @@ import { formatTime, formatDate } from '@/utils'
 import { useQueryClient } from 'react-query';
 import menuItems from './admin/menuItems';
 import { useMenuItemWithPhoto } from '@/hooks/menuItemQuery';
+import { createBooking } from '@/controller/guest_api';
 
 const CheckOut = () => {
     const queryClient = useQueryClient()

@@ -1,7 +1,8 @@
+import { deleteBookingController, updateBookingController } from '@/controller/admin_api';
 import { MenuItem } from '@/model/MenuItem';
 import { BookingMenu } from '@/stores/bookingMenuStore';
 import { formatTime, formatDate } from '@/utils';
-import { Text, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider, Flex, Divider, Modal, ModalOverlay } from '@chakra-ui/react'
+import { Text, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider, Flex, Divider, Modal, ModalOverlay, useToast } from '@chakra-ui/react'
 import React from 'react'
 
 type Props = {
@@ -15,9 +16,48 @@ type Props = {
 const UpdateBookingMenuModal = (props: Props) => {
     const { onClose, isOpen } = props
     const { booking, menuItems } = props.bookingMenu
+    const toast = useToast()
 
-    function handleClick() {
-        console.log(booking)
+    async function handleUpdate() {
+        const data = await updateBookingController()
+        try {
+            toast({
+                title: 'Soon',
+                description: data, 
+                status: 'warning',
+                duration: 3000, 
+                isClosable: true,
+            });
+        } catch (error: any) {
+            toast({
+                title: 'Error',
+                description: error.message, 
+                status: 'error',
+                duration: 3000, 
+                isClosable: true,
+            });
+        }
+    }
+
+    async function handleDelete() {
+        const data = await deleteBookingController()
+        try {
+            toast({
+                title: 'Soon',
+                description: data, 
+                status: 'warning',
+                duration: 3000, 
+                isClosable: true,
+            });
+        } catch (error: any) {
+            toast({
+                title: 'Error',
+                description: error.message, 
+                status: 'error',
+                duration: 3000, 
+                isClosable: true,
+            });
+        }
     }
     
     return (
@@ -120,17 +160,18 @@ const UpdateBookingMenuModal = (props: Props) => {
 
                     <ModalFooter>
                         <Button bgColor='primary' color='white' mr={3}
-                            onClick={handleClick}
+                            onClick={handleUpdate}
                             _hover={{
                                 bgColor: 'secondary',
                             }}
                         >
                             Update
                         </Button>
-                        <Button colorScheme='red' mr={3}>
+                        <Button colorScheme='red' mr={3}
+                            onClick={handleDelete}
+                        >
                             Delete
                         </Button>
-                        {/* <Button onClick={onClose}>Cancel</Button> */}
                     </ModalFooter>
                 </ModalContent>
             </Modal>

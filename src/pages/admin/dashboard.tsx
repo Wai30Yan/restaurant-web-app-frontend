@@ -3,14 +3,14 @@ import UpdateBookingMenuModal from '@/components/UpdateBookingMenuModal'
 import { MenuItem } from '@/model/MenuItem'
 import { useBookingMenuStore } from '@/stores/bookingMenuStore'
 import { SettingsIcon } from '@chakra-ui/icons'
-import { Text, Box, Button, Center, Heading, IconButton, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure, Spacer, HStack } from '@chakra-ui/react'
+import { Text, Button, Center, Heading, IconButton, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure, HStack, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import React, { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
 import MenuItems from './menuItems'
 import Head from 'next/head'
-import { getBookingController } from '@/controller/admin_api'
+import { useBookingMenuQuery } from '@/hooks/menuItemQuery'
+import { updateBookingController, deleteBookingController } from '@/controller/admin_api'
 
 type Order = {
     count: number,
@@ -32,20 +32,13 @@ export type BookingMenu = {
     menuItems: MenuItem[]
 }
 
-
-export function useBookingMenuQuery() {
-    const { data: bookingMenus } = useQuery('booking-menus', getBookingController)
-    return bookingMenus
-}
-
 const Bookings = () => {
     const router = useRouter()
     const bookingMenus = useBookingMenuQuery()
-
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const bookings = bookingMenus?.map(bookingMenu => bookingMenu.booking)
-    const menuItems = bookingMenus?.map(bookingMenu => bookingMenu.menuItems)
+    // const menuItems = bookingMenus?.map(bookingMenu => bookingMenu.menuItems)
 
     const { bookingMenu, setBookingMenu, removeBookingMenu } = useBookingMenuStore()
 
@@ -90,6 +83,8 @@ const Bookings = () => {
         localStorage.removeItem("jwtToken")
         setLogin(false)
     }
+
+
 
 
     return (
@@ -204,8 +199,7 @@ const Bookings = () => {
                                             isOpen={isOpen}
                                             onClose={closeModal}
                                             onOpen={onOpen}
-                                            bookingMenu={bookingMenu}
-
+                                            bookingMenu={bookingMenu} 
                                         />
                                     </Tbody>
                                 </Table>
