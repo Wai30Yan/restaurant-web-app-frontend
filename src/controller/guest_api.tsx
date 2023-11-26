@@ -10,7 +10,6 @@ const API = axios.create({
 
 
 export const getAllMenuItems = async (): Promise<MenuItem[]> => {
-    console.log("hello")
     try {
         const response: AxiosResponse<MenuItem[]> = await API.get(`${url}/guest/menu-items`);
         return response.data;

@@ -4,7 +4,7 @@ import useCustomerStore from '@/stores/customerStore';
 import useOrderStore from '@/stores/orderStore';
 import { Button, Center, Heading, Text, Image, Flex, Box, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spacer, Divider, useToast, Card, CardBody, CardHeader, Stack, StackDivider } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
-import React from 'react'
+import React, { useState } from 'react'
 import { formatTime, formatDate } from '@/utils'
 import { useQueryClient } from 'react-query';
 import menuItems from './admin/menuItems';
@@ -15,7 +15,8 @@ const CheckOut = () => {
     const queryClient = useQueryClient()
     const { orders, incrementItemCount, decrementItemCount, removeOrder } = useOrderStore();
     const { customer, date, removeCustomer, removeDate } = useCustomerStore();
-    const totalPrice = calculateTotalPrice(orders)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const totalPrice = Number(calculateTotalPrice(orders).toFixed(2))
     const menuItems = useMenuItemWithPhoto()
     const router = useRouter()
     const toast = useToast()
@@ -27,7 +28,7 @@ const CheckOut = () => {
             price += priceToAdd
         })
 
-        return price
+        return Number(price.toFixed(2))
     }
 
     async function handleSubmit(event: React.FormEvent) {
@@ -37,6 +38,7 @@ const CheckOut = () => {
             itemId: order.menuItem.id
         }))
 
+        setIsLoading(true)
 
         const formData = {
             firstName: customer.firstName,
@@ -44,7 +46,7 @@ const CheckOut = () => {
             phoneNumber: customer.phoneNumber,
             date: date,
             orders: ordersList,
-            totalPrice: totalPrice
+            totalPrice: Number(totalPrice.toFixed(2))
         }
         try {
             await createBooking(formData)
@@ -71,6 +73,8 @@ const CheckOut = () => {
                 duration: 3000,
                 isClosable: true,
             });
+        } finally {
+            setIsLoading(false)
         }
 
 
@@ -151,7 +155,7 @@ const CheckOut = () => {
                                                 <>
                                                     <Flex>
                                                         <Text key={`${item?.id}`} color='black' pt='2' fontSize='sm'>
-                                                            $ {item && item?.price * order.count}
+                                                            $ {item && Number((item?.price * order.count).toFixed(2))}
                                                         </Text>
                                                     </Flex>
                                                 </>
@@ -195,7 +199,7 @@ const CheckOut = () => {
                                     </Box>
                                     <Flex px='5px' flexDir='column' justifyContent='center' alignItems='flex-end'>
                                         <Text fontFamily='mono' fontSize={{ base: 'sm', sm: 'lg' }} color='primary' fontStyle='bold' > {menuItem.name} x {count} </Text>
-                                        <Text fontSize={{ base: 'sm', sm: 'lg' }}> Price: {menuItem.price * count} </Text>
+                                        <Text fontSize={{ base: 'sm', sm: 'lg' }}> Price: {Number((menuItem.price * count).toFixed(2))} </Text>
                                         <NumberInput
                                             // key={found ? found.count : 0}
                                             maxW={{ sm: '60px' }}

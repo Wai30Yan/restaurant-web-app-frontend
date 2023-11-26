@@ -3,7 +3,7 @@ import useCustomerStore from '@/stores/customerStore'
 import { PhoneIcon } from '@chakra-ui/icons'
 import { ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
     onClose: () => void
@@ -28,6 +28,7 @@ const CustomerInfoModal = (props: Props) => {
     const { customer, addCustomer, setDate } = useCustomerStore();
     const router = useRouter();
 
+    const [isDisables, setIsDisables] = useState<boolean>(true);
     const currentDate = new Date();
 
     currentDate.setMinutes(currentDate.getMinutes() - currentDate.getTimezoneOffset()); // Set time zone offset to zero
@@ -45,6 +46,7 @@ const CustomerInfoModal = (props: Props) => {
             ...formData,
             date: selectedDate
         });
+
     }
 
     function handleFormDataChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
@@ -55,6 +57,16 @@ const CustomerInfoModal = (props: Props) => {
             [name]: value
         })
     }
+
+    useEffect(() => {
+        const { firstName, lastName, phoneNumber } = formData
+        if (firstName.length > 0 && lastName.length > 0 && phoneNumber.length > 0) {
+            setIsDisables(false)
+        }
+        if (firstName == '' || lastName == '' || phoneNumber == '') {
+            setIsDisables(true)
+        }
+    }, [formData])
 
     function handleContinue(event: React.FormEvent) {
         event.preventDefault();
@@ -140,6 +152,7 @@ const CustomerInfoModal = (props: Props) => {
                         bgColor: 'secondary',
                     }}
                     mr={3}
+                    isDisabled={isDisables}
                     onClick={handleContinue}
                 >
                     Continue

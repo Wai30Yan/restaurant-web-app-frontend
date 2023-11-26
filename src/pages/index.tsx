@@ -22,7 +22,9 @@ export default function Home() {
 
   function calculateTotalPrice(orderList: Order[]) {
     return orderList.reduce((total, order) => {
-      return total + order.menuItem.price * order.count;
+      const num = total + order.menuItem.price * order.count
+
+      return Number(num.toFixed(2));
     }, 0);
   }
 
@@ -30,7 +32,6 @@ export default function Home() {
 
   function handleFilter(cat: string) {
     if (cat == 'all') {
-      console.log(cat)
       setFiltered(false)
       return
     }
